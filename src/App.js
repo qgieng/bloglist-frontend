@@ -10,6 +10,10 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [error, setErrorMessage] = useState('');
   const [user, setUser] = useState(null);
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [url, setUrl] = useState('');
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -21,7 +25,7 @@ const App = () => {
     if(loggeduserJson){
       const user = JSON.parse(loggeduserJson);
       setUser(user)
-      //token
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -33,13 +37,13 @@ const App = () => {
         username, password
       })
       window.localStorage.setItem('loggedBlogappuser', JSON.stringify(user));
-      //settoken
+      blogService.setToken(user.token)
       setUser(user);
       setUsername('');
       setPassword('');
 
     }catch(exception){
-      setErrorMessage("Wrong Credentials");
+      setErrorMessage(exception.error);
       setTimeout(()=>{
         setErrorMessage(null
         );
@@ -47,6 +51,23 @@ const App = () => {
     }
   }
 
+  const handlePostBlog = async event =>{
+    event.preventDefault();
+    try{
+        const blogpost = await blogService.postBlog({
+          title, author,url 
+        });
+        setAuthor('');
+        setTitle('');
+        setUrl('');
+    }catch(exception){
+      setErrorMessage(exception.error);
+      setTimeout(()=>{
+        setErrorMessage(null
+        );
+      }, 5000);
+    }
+  }
   const loginForm = () =>{
     return(
       <div>
@@ -77,6 +98,8 @@ const App = () => {
     )
   }
 
+
+
   const blogForm = () =>{
     return(<div>
       <h1> Blogs</h1>
@@ -86,7 +109,46 @@ const App = () => {
         window.localStorage.removeItem('loggedBlogappuser'); 
         setUser(null);}}
       >logout</button>
+      {postBlog()}
     </div>)
+  }
+
+  const postBlog = () =>{
+    return (
+      <div>
+        <form onSubmit={handlePostBlog}>
+          <div>
+            title:
+            <input
+              type = 'text'
+              value={title}
+              name="title"
+              onChange={({target})=>setTitle(target.value)}
+              />
+          </div>
+          <div>
+            author:
+            <input
+              type = 'text'
+              value={author}
+              name='author'
+              onChange={({target})=>setAuthor(target.value)}
+            />
+          </div>
+          <div>
+            url:
+            <input
+               type = 'text'
+               value={url}
+               name='url'
+               onChange={({target})=>setUrl(target.value)}
+            />
+          </div>
+          <button>submit</button>
+        </form>
+      </div>
+    )
+
   }
 
   return (
@@ -98,6 +160,7 @@ const App = () => {
 
       <div>
         {user === null?loginForm():blogForm()}
+       
       </div>
       <div>
         <h2>blogs</h2>
