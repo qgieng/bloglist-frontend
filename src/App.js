@@ -46,7 +46,7 @@ const App = () => {
     }catch(exception){
       setErrorMessage("Invalid username or password");
       setTimeout(()=>{
-        setNotificationMessage(null
+        setErrorMessage(null
         );
       }, 5000);
     }
@@ -63,14 +63,17 @@ const App = () => {
         setUrl('');
         
         setNotificationMessage(`${postBlog.title} by ${postBlog.author} has been created`)
-
+        setTimeout(()=>{
+          setNotificationMessage(null
+          );
+        }, 5000);
         const allblogs = await blogService.getAll();
         setBlogs(allblogs);
         
     }catch(exception){
       setErrorMessage("Invalid request");
       setTimeout(()=>{
-        setNotificationMessage(null
+        setErrorMessage(null
         );
       }, 5000);
     }
