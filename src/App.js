@@ -9,6 +9,7 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [notification, setNotificationMessage] = useState(null);
+  const [error, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -43,7 +44,7 @@ const App = () => {
       setPassword('');
 
     }catch(exception){
-      setNotificationMessage("Invalid username or password");
+      setErrorMessage("Invalid username or password");
       setTimeout(()=>{
         setNotificationMessage(null
         );
@@ -67,7 +68,7 @@ const App = () => {
         setBlogs(allblogs);
         
     }catch(exception){
-      setNotificationMessage("Invalid request");
+      setErrorMessage("Invalid request");
       setTimeout(()=>{
         setNotificationMessage(null
         );
@@ -78,6 +79,7 @@ const App = () => {
     return(
       <div>
         <h2>log in to application</h2>
+        <h2><Notification type='Error' message={error}/></h2>
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -162,8 +164,8 @@ const App = () => {
      
     <div>
 
-      <h2><Notification message={notification}/></h2>
-
+      <h2><Notification type='Notification' message={notification}/></h2>
+      
       <div>
         {user === null?loginForm():blogForm()}
        
