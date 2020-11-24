@@ -8,7 +8,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setErrorMessage] = useState('');
+  const [notification, setNotificationMessage] = useState(null);
   const [user, setUser] = useState(null);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
@@ -43,9 +43,9 @@ const App = () => {
       setPassword('');
 
     }catch(exception){
-      setErrorMessage(exception.error);
+      setNotificationMessage("Invalid username or password");
       setTimeout(()=>{
-        setErrorMessage(null
+        setNotificationMessage(null
         );
       }, 5000);
     }
@@ -54,16 +54,22 @@ const App = () => {
   const handlePostBlog = async event =>{
     event.preventDefault();
     try{
-        const blogpost = await blogService.postBlog({
+        const postBlog = await blogService.postBlog({
           title, author,url 
         });
         setAuthor('');
         setTitle('');
         setUrl('');
+        
+        setNotificationMessage(`${postBlog.title} by ${postBlog.author} has been created`)
+
+        const allblogs = await blogService.getAll();
+        setBlogs(allblogs);
+        
     }catch(exception){
-      setErrorMessage(exception.error);
+      setNotificationMessage("Invalid request");
       setTimeout(()=>{
-        setErrorMessage(null
+        setNotificationMessage(null
         );
       }, 5000);
     }
@@ -156,7 +162,7 @@ const App = () => {
      
     <div>
 
-      <h2><Notification message={error}/></h2>
+      <h2><Notification message={notification}/></h2>
 
       <div>
         {user === null?loginForm():blogForm()}
