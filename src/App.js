@@ -42,7 +42,6 @@ const App = () => {
       setUser(user);
       setUsername('');
       setPassword('');
-
     }catch(exception){
       setErrorMessage("Invalid username or password");
       setTimeout(()=>{

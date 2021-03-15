@@ -21,4 +21,13 @@ const postBlog = async (bodydata) =>{
   return response.data;
 }
 
-export default { getAll , postBlog, setToken}
+const likeBlog = async (bodydata)=>{
+  const config = {
+    headers: {Authorization: token},
+  };
+
+  const response = await axios.put(baseUrl, bodydata, config);
+  return response.data;
+}
+
+export default { getAll , postBlog,likeBlog, setToken}
