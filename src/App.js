@@ -14,10 +14,9 @@ const App = () => {
   const [notification, setNotificationMessage] = useState(null);
   const [error, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
 
+  //remove after refactoring
+ 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -55,32 +54,28 @@ const App = () => {
     }
   }
 
-  const handlePostBlog = async event =>{
-    event.preventDefault();
+  const addBlog =async (BlogObject) =>{
     try{
-        const postBlog = await blogService.postBlog({
-          title, author,url 
-        });
-        setAuthor('');
-        setTitle('');
-        setUrl('');
-        
-        setNotificationMessage(`${postBlog.title} by ${postBlog.author} has been created`)
-        setTimeout(()=>{
-          setNotificationMessage(null
-          );
-        }, 5000);
-        const allblogs = await blogService.getAll();
-        setBlogs(allblogs);
-        
-    }catch(exception){
-      setErrorMessage("Invalid request");
+      console.log(BlogObject)
+      const postBlog = await blogService.postBlog({
+        BlogObject
+      });
+      console.log('postblog object', postBlog);
+      setNotificationMessage(`${postBlog.title} by ${postBlog.author} has been created`)
+      const allblogs = await blogService.getAll();
+      setBlogs(allblogs);
       setTimeout(()=>{
-        setErrorMessage(null
+        setNotificationMessage(null
         );
       }, 5000);
-    }
-  }
+      
+      
+  }catch(exception){
+    setErrorMessage("Invalid request");
+    setTimeout(
+        ()=>{setErrorMessage(null);}
+        , 5000);
+  }}
   
   const loginForm = () =>{
     return(
@@ -116,13 +111,7 @@ const App = () => {
         <div> 
           <Togglable buttonLabel='create new blog'>
             <PostBlog 
-              handlePostBlog={handlePostBlog}
-              title={title}
-              handleTitleChange={({target})=>setTitle(target.value)}
-              author={author}
-              handleAuthorChange={({target})=>setAuthor(target.value)}
-              url={url}
-              handleUrlChange={({target})=>{setUrl(target.value)}}
+              createBlog={addBlog}
             />
           </Togglable>
         </div>

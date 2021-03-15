@@ -1,13 +1,19 @@
-import React from 'react';
+import React ,{useState} from 'react';
 
 const PostBlog = ({
-    handlePostBlog,
-    title,
-    handleTitleChange,
-    author,
-    handleAuthorChange,
-    url,
-    handleUrlChange})=>{
+    createBlog})=>{
+        const [title, setTitle] = useState('');
+        const [author, setAuthor] = useState('');
+        const [url, setUrl] = useState('');
+
+        const handlePostBlog =  (event)=>{
+          event.preventDefault();
+          createBlog({title, author, url});
+          setTitle('');
+          setAuthor('');
+          setUrl('');
+        }
+
         return(
             <div>
             <form onSubmit={handlePostBlog}>
@@ -17,7 +23,7 @@ const PostBlog = ({
                   type = 'text'
                   value={title}
                   name="title"
-                  onChange={handleTitleChange}
+                  onChange={({target})=>setTitle(target.value)}
                   />
               </div>
               <div>
@@ -26,7 +32,7 @@ const PostBlog = ({
                   type = 'text'
                   value={author}
                   name='author'
-                  onChange={handleAuthorChange}
+                  onChange={({target})=>setAuthor(target.value)}
                 />
               </div>
               <div>
@@ -35,7 +41,7 @@ const PostBlog = ({
                    type = 'text'
                    value={url}
                    name='url'
-                   onChange={handleUrlChange}
+                   onChange={({target})=>{setUrl(target.value)}}
                 />
               </div>
               <button>create</button>
