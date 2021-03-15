@@ -14,8 +14,6 @@ const App = () => {
   const [notification, setNotificationMessage] = useState(null);
   const [error, setErrorMessage] = useState(null);
   const [user, setUser] = useState(null);
-
-  //remove after refactoring
  
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -58,18 +56,15 @@ const App = () => {
     try{
       console.log(BlogObject)
       const postBlog = await blogService.postBlog({
-        BlogObject
+        ...BlogObject
       });
-      console.log('postblog object', postBlog);
       setNotificationMessage(`${postBlog.title} by ${postBlog.author} has been created`)
-      const allblogs = await blogService.getAll();
-      setBlogs(allblogs);
       setTimeout(()=>{
         setNotificationMessage(null
         );
       }, 5000);
-      
-      
+      const allblogs = await blogService.getAll();
+      setBlogs(allblogs);
   }catch(exception){
     setErrorMessage("Invalid request");
     setTimeout(
