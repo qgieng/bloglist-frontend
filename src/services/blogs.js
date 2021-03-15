@@ -16,7 +16,7 @@ const postBlog = async (bodydata) =>{
   const config = {
     headers: {Authorization: token},
   };
-  console.log('body data', bodydata);
+
   const response =await  axios.post(baseUrl, bodydata, config);
   return response.data;
 }

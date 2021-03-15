@@ -65,12 +65,13 @@ const App = () => {
       }, 5000);
       const allblogs = await blogService.getAll();
       setBlogs(allblogs);
-  }catch(exception){
-    setErrorMessage("Invalid request");
-    setTimeout(
-        ()=>{setErrorMessage(null);}
-        , 5000);
-  }}
+    }catch(exception){
+      setErrorMessage("Invalid request");
+      setTimeout(
+          ()=>{setErrorMessage(null);}
+          , 5000);
+    }
+  }
   
   const loginForm = () =>{
     return(
@@ -126,7 +127,7 @@ const App = () => {
       <div>
         <h2>blogs</h2>
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} />  
         )}
       </div>
     </div>
